@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Edit Profile </title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background: #f5f6fa;
+	margin: 0;
+	padding: 40px;
+}
+
+.container {
+	max-width: 500px;
+	margin: 0 auto;
+	background: white;
+	padding: 25px;
+	border-radius: 10px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+	text-align: center;
+	color: #333;
+}
+
+label {
+	font-weight: bold;
+	display: block;
+	margin-top: 10px;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
+
+button {
+	margin-top: 20px;
+	width: 100%;
+	padding: 12px;
+	background: #673AB7;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+button:hover {
+	opacity: 0.9;
+}
+
+.success {
+	margin-top: 15px;
+	color: green;
+	text-align: center;
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Dynamic heading based on role -->
+    <h2>
+        <span sec:authorize="hasAuthority('admin')">👑 Admin Profile</span>
+        <span sec:authorize="hasAuthority('student')">🎓 Student Profile</span>
+    </h2>
+
+    <form th:action="@{/profile/update}" th:object="${user}" method="post">
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" readonly />
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" readonly />
+
+        <label>Username:</label>
+        <input type="text" th:field="*{username}" readonly />
+
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" />
+
+        <!-- Custom fields to update manually -->
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}" />
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <div th:if="${param.success}" class="success">
+        ✅ Profile updated successfully!
+    </div>
+</div>
+</body>
+</html>

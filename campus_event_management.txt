@@ -1,0 +1,27 @@
+create database campusevent;
+
+use campusevent;
+
+create table account(id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(80), email VARCHAR(80), username VARCHAR(80), password VARCHAR(80), role VARCHAR(80));
+
+select * from account;
+
+create table categories(id BIGINT AUTO_INCREMENT primary key, name varchar(255) NOT NULL UNIQUE);
+
+select * from categories;
+
+create table events(id BIGINT AUTO_INCREMENT primary key, title varchar(255) NOT NULL, description text, date DATE, time TIME, location varchar(255), imageurl varchar(255), category_id BIGINT, CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(id));
+
+select * from events;
+
+create table registrations(id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, event_id BIGINT NOT NULL, registered_at DATETIME NOT NULL, CONSTRAINT fk_registration_user FOREIGN KEY (user_id) REFERENCES account(id), CONSTRAINT fk_registration_event FOREIGN KEY (event_id) REFERENCES events(id));
+
+select * from registrations;
+
+drop table registrations;
+
+create table attendes(id BIGINT AUTO_INCREMENT PRIMARY KEY, registration_id BIGINT NOT NULL, attended_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, approved_by BIGINT NULL, approval_date DATETIME NULL, status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'PENDING', CONSTRAINT fk_attendee_registration FOREIGN KEY (registration_id) REFERENCES registrations(id), CONSTRAINT fk_attendee_admin FOREIGN KEY (approved_by) REFERENCES account(id), UNIQUE KEY uq_registration (registration_id));
+
+select * from attendes;
+
+drop table attendes;

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Admin Profile </title>
+<style>
+/* --- Keep your existing styles for sidebar and form --- */
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	display: flex;
+	min-height: 100vh;
+}
+
+.sidebar {
+	width: 220px;
+	background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09, #ebb612);
+    backdrop-filter: blur(10px);
+	color: white;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+.sidebar h2 {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.sidebar a {
+	color: white;
+	text-decoration: none;
+	padding: 12px;
+	margin: 5px 0;
+	border-radius: 6px;
+	display: block;
+}
+
+.sidebar a:hover {
+	background: #4CAF50;
+}
+
+.content {
+	flex: 1;
+	background: url('/images/admindashboard.jpg') no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 40px;
+}
+
+.container {
+	background: rgba(255, 255, 255, 0.95);
+	padding: 30px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+	width: 50%;
+}
+
+h1 {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+form label {
+	display: block;
+	margin: 10px 0 5px;
+}
+
+form input, form textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+}
+
+button {
+	background: linear-gradient(135deg, #4CAF50, #45a049);
+	color: white;
+	border: none;
+	padding: 12px 25px;
+	border-radius: 8px;
+	cursor: pointer;
+	display: block;
+	margin: 20px auto;
+	font-weight: bold;
+}
+
+button:hover {
+	background: linear-gradient(135deg, #45a049, #3e8e41);
+	transform: scale(1.05);
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -220px; /* Hidden by default on mobile */
+    }
+    .sidebar.show {
+        left: 0; /* Show on mobile */
+    }
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.sidebar a, .sidebar button {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar button {
+    width: 100%;
+    text-align: left;
+}
+
+/* Mobile toggle button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: #053715;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-toggle {
+        display: block; /* Show on mobile */
+    }
+    .container {
+        margin-left: 0 !important; /* Reset margin on small screens */
+    }
+}
+
+/* --- MAIN CONTENT CONTAINER --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 240px; /* space for sidebar on larger screens */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: auto;
+    max-width: 1400px;
+    flex-grow: 1;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+img.event-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+a.btn, button.btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+a.btn:hover, button.btn:hover { 
+	opacity: 0.85;
+}
+
+/* Extra Controls */
+#searchContainer {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+#searchContainer input, #searchContainer select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    flex-grow: 1;
+    min-width: 150px;
+    max-width: 220px;
+}
+
+#searchContainer .btn-create {
+    background: #4CAF50;
+    white-space: nowrap;
+}
+
+#searchContainer .btn-reset {
+    background: #FF5722; /* Orange color for reset */
+    white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>⚙️ Admin</h2>
+    <a href="/admin/dashboard">🏠 Dashboard</a>
+    <a href="/admin/events">📅 Manage Events</a>
+    <a href="/admin/users">👥 Manage Users</a>
+    <a href="/admin/reports">📊 Reports</a>
+    <a th:href="@{/admin/profile}">👤 Profile</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">🚪 Logout</button>
+    </form>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <div class="container">
+        <h1>👤 Admin Profile</h1>
+        <form th:action="@{/admin/profile/update}" th:object="${user}" method="post">
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" readonly>
+
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" readonly>
+
+            <label>Username:</label>
+            <input type="text" th:field="*{username}" readonly>
+
+            <label>Password (leave blank to keep current):</label>
+            <input type="password" th:field="*{password}">
+
+            <label>Phone:</label>
+            <input type="text" th:field="*{phone}" placeholder="Enter phone">
+
+            <label>LinkedIn:</label>
+            <input type="url" th:field="*{linkedIn}" placeholder="https://www.linkedin.com/in/username">
+
+            <label>Bio:</label>
+            <textarea th:field="*{bio}" placeholder="Write about yourself"></textarea>
+
+            <button type="submit">💾 Update Profile</button>
+        </form>
+
+        <div th:if="${message}" style="color:green; text-align:center; margin-top:10px;">
+            <span th:text="${message}"></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

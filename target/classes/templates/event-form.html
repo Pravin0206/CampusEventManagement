@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:text="${event.id == null} ? 'Create Event' : 'Edit Event'"> Event Form </title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/eventformbg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 450px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #673AB7;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+textarea { 
+	resize: vertical;
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover { 
+	background: #45a049;
+}
+
+.back-link {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.preview-img img {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+</style>
+</head>
+<body>
+<div class="form-container">
+    <h2 th:text="${event.id == null} ? 'Create Event' : 'Edit Event'"></h2>
+
+    <form th:action="@{/events/save}" th:object="${event}" method="post">
+
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" placeholder="Enter event title" required />
+
+        <label>Description:</label>
+        <textarea th:field="*{description}" rows="3" placeholder="Enter event description"></textarea>
+
+        <label>Date:</label>
+        <input type="date" th:field="*{date}" required />
+
+        <label>Time:</label>
+        <input type="time" th:field="*{time}" required />
+
+        <label>Location:</label>
+        <input type="text" th:field="*{location}" placeholder="Enter location" required />
+
+        <label>Category:</label>
+		<select th:field="*{category.id}" required>
+    		<option value="">-- Select Category --</option>
+    		<option th:each="cat : ${categories}" 
+            	th:value="${cat.id}" 
+            	th:text="${cat.name}"
+            	th:selected="${event.category != null} ? ${cat.id} == ${event.category.id} : false">
+    		</option>
+		</select>
+
+        <label>Image URL:</label>
+        <input type="text" th:field="*{imageUrl}" placeholder="/images/eventsports.jpg" />
+
+        <!-- Image preview -->
+        <div class="preview-img" th:if="${event.imageUrl}">
+            <p>Current Image:</p>
+            <img th:src="@{${event.imageUrl}}" alt="Event Image"/>
+        </div>
+
+        <button type="submit">💾 Save Event</button>
+    </form>
+
+    <a th:href="@{/events}" class="back-link">⬅ Back to Events</a>
+</div>
+</body>
+</html>

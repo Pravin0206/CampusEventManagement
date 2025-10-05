@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> 📊 Student Reports </title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: url('/images/reports-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    /* Added backdrop blur for a "glass" effect */
+    backdrop-filter: blur(5px);
+    color: white;
+    padding: 20px;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+    display: block;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    margin: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background: #f4f4f4;
+    text-align: left;
+}
+</style>
+</head>
+<body>
+<<!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎓 Student</h2>
+        <a th:href="@{/student/dashboard}">🏠 Dashboard</a>
+        <a th:href="@{/student/events}">📅 My Events</a>
+        <a th:href="@{/student/reports}">📊 Reports</a>
+        <a th:href="@{/users/profile}">👤 Profile</a>
+        <a th:href="@{/users/logout}">🚪 Logout</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1>📊 My Reports</h1>
+
+        <h2>Event Statistics</h2>
+        <table>
+            <tr><th>Total Available Events</th><td th:text="${totalEvents}"></td></tr>
+            <tr><th>Upcoming Events Registered</th><td th:text="${upcomingEvents}"></td></tr>
+            <tr><th>Past Events Attended</th><td th:text="${pastEvents}"></td></tr>
+        </table>
+
+        <h2>Registration Statistics</h2>
+        <table>
+            <tr><th>Total Registrations</th><td th:text="${totalRegistrations}"></td></tr>
+        </table>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a th:href="@{/student/dashboard}"
+               style="background: #2196F3; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none;">
+               ⬅ Back to Dashboard
+            </a>
+        </div>
+    </div>
+</body>
+</html>

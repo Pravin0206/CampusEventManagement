@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Campus Event Management</title>
+
+    <style>
+        /* Full-page background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('/images/campus.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Semi-transparent content box */
+        .container {
+            background: rgba(255, 255, 255, 0.85); /* white with transparency */
+            padding: 40px 60px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        button {
+            font-size: 1em;
+            padding: 10px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button.signup {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button.login {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Campus Event Management System 🎓</h1>
+        <p>Please choose an option:</p>
+
+        <!-- Thymeleaf links to controller mappings -->
+        <a th:href="@{/users/signup}">
+            <button class="signup">Signup</button>
+        </a>
+        <a th:href="@{/users/login}">
+            <button class="login">Login</button>
+        </a>
+    </div>
+</body>
+</html>

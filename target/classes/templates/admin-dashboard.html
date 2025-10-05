@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Admin Dashboard </title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+	min-height: 100vh;
+	background: url('/images/admindashboard.jpg') no-repeat center center
+		fixed;
+	background-size: cover;
+}
+
+/* Sidebar */
+.sidebar {
+	min-width: 220px;
+	max-width: 220px;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: -220px;
+	background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09,
+		#ebb612);
+	backdrop-filter: blur(10px);
+	color: white;
+	padding-top: 20px;
+	display: flex;
+	flex-direction: column;
+	transition: all 0.3s ease;
+	z-index: 1050;
+}
+
+@media ( min-width : 768px) {
+	.sidebar {
+		left: 0;
+	}
+}
+
+.sidebar.show {
+	left: 0;
+}
+
+.sidebar h2 {
+	text-align: center;
+	margin-bottom: 30px;
+	font-weight: bold;
+	font-size: 1.4rem;
+}
+
+.sidebar a, .sidebar button {
+	display: block;
+	padding: 12px 20px;
+	color: white;
+	text-decoration: none;
+	margin-bottom: 5px;
+	border-radius: 8px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	background: transparent;
+	border: none;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+	transform: translateX(5px);
+}
+
+.sidebar a.active {
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar button {
+	width: 100%;
+	text-align: left;
+}
+
+/* Main Content */
+.main-content {
+	margin-left: 0;
+	padding: 30px;
+	background: linear-gradient(to right top, #bae219, #b0c43d, #a1a851, #8e8e60,
+		#76756d);
+	min-height: 100vh;
+}
+
+@media ( min-width : 768px) {
+	.main-content {
+		margin-left: 240px;
+	}
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+	display: block;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	z-index: 1100;
+	background: #053715;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 5px;
+}
+
+@media ( min-width : 768px) {
+	.sidebar-toggle {
+		display: none;
+	}
+}
+
+/* Cards */
+.card-light-bg {
+	background: rgba(255, 255, 255, 0.7);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-light-bg:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-custom {
+	background-color: #627b14;
+	color: white;
+	border: none;
+	transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+	background-color: #2f5918;
+	color: white;
+}
+
+/* Search Bar */
+.search-container {
+	margin-top: 20px;
+	margin-bottom: 30px;
+	max-width: 500px;
+}
+
+.search-container .form-control {
+	border-radius: 20px 0 0 20px;
+	border: 2px solid #a19b09;
+}
+
+.search-container .btn {
+	border-radius: 0 20px 20px 0;
+	background-color: #a19b09;
+	border: 2px solid #a19b09;
+	color: white;
+}
+
+.search-container .btn:hover {
+	background-color: #ebb612;
+	border-color: #ebb612;
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar Toggle -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('show')">☰</button>
+
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column">
+    <h2>⚙️ Admin Menu</h2>
+    <a th:href="@{/admin/dashboard}" class="text-white">Dashboard</a>
+    <a th:href="@{/admin/events}" class="text-white" id="manage-events-link">Manage Events</a>
+    <a th:href="@{/admin/event/new}" class="text-white">➕ Create Event</a>
+    <a th:href="@{/admin/categories}" class="text-white">Manage Categories</a>
+    <a th:href="@{/admin/users}" class="text-white">👥 Manage Users</a>
+    <a th:href="@{/admin/reports}" class="text-white">📊 Reports</a>
+    <a th:href="@{/admin/registrations}" class="text-white">View Registrations</a>
+    <a th:href="@{/admin/profile}" class="text-white">👤 Profile</a>
+    <form th:action="@{/logout}" method="post" class="mt-auto">
+        <button type="submit" class="w-100 btn btn-outline-light">Logout</button>
+    </form>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="container-fluid">
+        <h1 class="mb-4">📊 Admin Dashboard</h1>
+        <p>Welcome back, <span th:text="${adminName}">Admin</span></p>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search events, users, or registrations..." aria-label="Search" id="dashboard-search-input">
+                <button class="btn" type="button" onclick="performDashboardSearch()">Search</button>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-3">
+            <!-- Total Events Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Total Events</h5>
+                    <p class="display-6" th:text="${eventCount}">0</p>
+                    <a th:href="@{/admin/events}" class="btn btn-sm btn-custom">Manage Events</a>
+                </div>
+            </div>
+
+            <!-- Total Categories Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Total Categories</h5>
+                    <p class="display-6" th:text="${categoryCount}">0</p>
+                    <a th:href="@{/admin/categories}" class="btn btn-sm btn-custom">Manage Categories</a>
+                </div>
+            </div>
+
+            <!-- Total Registrations Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Total Registrations</h5>
+                    <p class="display-6" th:text="${registrationCount}">0</p>
+                    <a th:href="@{/admin/registrations}" class="btn btn-sm btn-custom">View Registrations</a>
+                </div>
+            </div>
+
+            <!-- Users Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Users</h5>
+                    <p class="display-6" th:text="${userCount}">0</p>
+                    <a th:href="@{/admin/users}" class="btn btn-sm btn-custom">Manage Users</a>
+                </div>
+            </div>
+
+            <!-- Reports Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Reports</h5>
+                    <p class="display-6" th:text="${reportCount}">0</p>
+                    <a th:href="@{/admin/reports}" class="btn btn-sm btn-custom">Manage Reports</a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="col-md-4">
+                <div class="card profile-card p-3 text-center card-light-bg">
+                    <h5 class="card-title">👤 Profile</h5>
+                    <p class="fw-bold" th:text="${adminName}">Admin</p>
+                    <a th:href="@{/admin/profile}" class="btn btn-sm btn-custom">View Profile</a>
+                </div>
+            </div>
+
+            <!-- Mark Past Events Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Mark Past Events</h5>
+                    <p>Automatically</p>
+                    <form th:action="@{/admin/attendance/mark-past-events}" method="post">
+                        <button type="submit" class="btn btn-sm btn-custom">Mark Past Events</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pending Attendance Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Pending Attendance</h5>
+                    <p>Approve or Reject Pending Requests</p>
+                    <a th:href="@{/admin/attendance/pending}" class="btn btn-sm btn-custom">View Pending</a>
+                </div>
+            </div>
+
+            <!-- Manual Attendance Card -->
+            <div class="col-md-4">
+                <div class="card p-3 text-center card-light-bg">
+                    <h5 class="card-title text-primary">Mark Individual Attendance</h5>
+                    <p>Manual</p>
+                    <a th:href="@{/admin/registrations}" class="btn btn-sm btn-custom">Go to Registrations</a>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Navigate to Manage Events on 'b' key ONLY if not typing in search
+document.addEventListener('keydown', function(event) {
+    if (event.key.toLowerCase() === 'b') {
+        const searchInput = document.getElementById('dashboard-search-input');
+        if (searchInput && document.activeElement === searchInput) {
+            return; // Don't navigate if typing in search
+        }
+        event.preventDefault();
+        const eventsLink = document.getElementById('manage-events-link');
+        if (eventsLink) {
+            window.location.href = eventsLink.href;
+        }
+    }
+});
+
+// Search button functionality
+function performDashboardSearch() {
+    const searchInput = document.getElementById('dashboard-search-input');
+    const query = searchInput.value.trim();
+    const lowerQuery = query.toLowerCase(); // Convert to lowercase once
+
+    if (query) {
+        const encodedQuery = encodeURIComponent(query);
+        
+        // Special handling for 'n' or 'bangalore' to route to location filter on the next page
+        if (lowerQuery === 'n' || lowerQuery === 'bangalore') {
+            window.location.href = `/admin/events?locationFilter=${encodedQuery}`;
+        } else {
+            // General search for all other queries (title/info)
+            window.location.href = `/admin/events?q=${encodedQuery}`;
+        }
+    } else {
+        window.location.href = '/admin/events';
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Student Dashboard </title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/studentdashboard.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* Sidebar Styling with Gradient and Mobile Responsiveness */
+.sidebar {
+    width: 220px;
+    /* Applied the requested gradient */
+    background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    /* Added backdrop blur for a "glass" effect */
+    backdrop-filter: blur(5px); 
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -220px; /* Hidden by default on mobile */
+    padding-top: 20px;
+    transition: all 0.3s ease;
+    z-index: 1050;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        left: 0; /* Always visible on desktop */
+    }
+}
+
+.sidebar.show {
+    left: 0; /* Show on mobile when toggled */
+}
+
+
+.sidebar h2 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s;
+    border-radius: 4px;
+    margin: 5px 10px;
+}
+
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Logout button */
+.sidebar form {
+    margin: 0;
+    padding: 0;
+    margin-top: auto; /* Push to the bottom */
+}
+
+.sidebar button {
+    background: none;
+    border: 1px solid white;
+    padding: 12px 20px;
+    width: 90%;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    margin: 10px;
+    border-radius: 6px;
+}
+
+.sidebar button:hover {
+    background-color: white;
+    color: #051937;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    background-image: linear-gradient(to right top, #bae219, #b0c43d, #a1a851, #8e8e60, #76756d);
+    margin-left: 0; /* No margin on mobile */
+    margin-top: 20px;
+    margin-right: 20px;
+    border-radius: 15px;
+    padding: 30px; 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 250px; /* Push content to the right of the sidebar on desktop */
+    }
+}
+
+/* Mobile toggle button */
+.sidebar-toggle {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: #004d7a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+@media (min-width: 768px) {
+    .sidebar-toggle {
+        display: none;
+    }
+}
+
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted min size for better mobile flow */
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Card Styling for Better Contrast */
+.card {
+    background: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2); /* Enhanced shadow */
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 20px;
+    color: #004d7a; /* Changed color to match gradient */
+}
+
+.card p {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 5px 0;
+    color: #333;
+}
+
+.card a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #008793; /* Changed button color to match gradient */
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: opacity 0.3s;
+}
+
+.card a:hover {
+    opacity: 0.8;
+    background: #00bf72;
+}
+
+/* Profile Card Styling */
+.profile-card {
+    border: 2px solid #004d7a; /* Darker blue border */
+    box-shadow: 0 6px 15px rgba(0, 77, 122, 0.4); /* Darker blue shadow */
+    background: #e6f7ff; /* Very light blue background */
+}
+
+.profile-card h3 {
+    color: #004d7a;
+    font-size: 22px;
+}
+
+.profile-card p {
+    font-size: 22px;
+    color: #444;
+}
+
+</style>
+</head>
+<body>
+    
+    <!-- Sidebar toggle button for mobile -->
+    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+        ☰
+    </button>
+    
+	<!-- Sidebar -->
+    <div class="sidebar d-flex flex-column">
+        <h2> ⚙️ Student Menu </h2>
+        <a th:href="@{/student/dashboard}">Dashboard</a>
+        <a th:href="@{/student/events}">View Events</a>
+        <a th:href="@{/student/registrations}">My Registrations</a>
+        <a th:href="@{/student/reports}">📊 Reports</a>
+        <a th:href="@{/users/profile}">👤 Profile</a>
+        <form th:action="@{/logout}" method="post" class="mt-auto">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1> 👋 Welcome, <span th:text="${studentName}"> Student </span></h1>
+        <p>Browse events and manage your registrations using the sidebar menu.</p>
+
+        <div class="dashboard-cards">
+            <!-- Available Events Card -->
+            <div class="card">
+                <h3>Available Events</h3>
+                <p th:text="${eventCount}">0</p>
+                <a th:href="@{/student/events}">View Events</a>
+            </div>
+
+            <!-- My Registrations Card -->
+            <div class="card">
+                <h3>My Registrations</h3>
+                <p th:text="${registrationCount}">0</p>
+                <a th:href="@{/student/registrations}">View Registrations</a>
+            </div>
+
+			<!-- Reports Card -->
+			<div class="card">
+				<h3>📊 Reports</h3>
+				<p th:text="${reportCount}">0</p>
+				<a th:href="@{/student/reports}">View Reports</a>
+			</div>
+
+			<!-- Total Categories Card -->
+            <div class="card">
+                <h3>Total Categories</h3>
+                <p th:text="${categoryCount}">0</p>
+                <a th:href="@{/student/events}">View Categories</a>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="card profile-card">
+                <h3>👤 Profile</h3>
+                <p th:text="${studentName}">Student</p>
+                <a th:href="@{/users/profile}">View Profile</a>
+            </div>
+
+			<!-- Attendance Card -->
+			<div class="card">
+				<h3>Mark Attendance</h3>
+				<p>For your registrations</p>
+				<a th:href="@{/student/registrations}">Go to My Registrations</a>
+			</div>
+
+		</div>
+    </div>
+    
+    <script>
+        // Simple script to close sidebar when a link is clicked on mobile
+        document.querySelectorAll('.sidebar a').forEach(item => {
+            item.addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                if (window.innerWidth < 768) {
+                    sidebar.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
