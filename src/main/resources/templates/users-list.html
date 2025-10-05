@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Manage Users </title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09, #ebb612);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 6px;
+    display: block;
+}
+
+.sidebar a:hover {
+    background: #4CAF50;
+}
+
+.content {
+    flex: 1;
+    background: url('/images/admindashboard.jpg') no-repeat center center fixed;
+    background-size: cover;
+    padding: 40px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: #4CAF50;
+    color: white;
+}
+
+input[type="text"], input[type="email"], select {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.btn-update {
+    background: orange;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: red;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<h2>⚙️ Admin</h2>
+		<a th:href="@{/admin/dashboard}">🏠 Dashboard</a> <a
+			th:href="@{/admin/events}">📅 Manage Events</a> <a
+			th:href="@{/admin/users}">👥 Manage Users</a> <a
+			th:href="@{/admin/reports}">📊 Reports</a>
+			<a th:href="@{/admin/profile}">👤 Profile</a>
+			<a th:href="@{/users/logout}">🚪 Logout</a>
+	</div>
+
+	<!-- Content -->
+	<div class="content">
+		<div class="container">
+			<h1>👥 Manage Users</h1>
+
+			<p th:if="${message}" style="color: green;" th:text="${message}"></p>
+			<p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
+			<table>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Username</th>
+					<th>Role</th>
+					<th>Actions</th>
+				</tr>
+
+				<tr th:each="u : ${users}">
+					<form th:action="@{/admin/users/edit/{id}(id=${u.id})}"
+						method="post">
+						<td th:text="${u.id}"></td>
+						<td><input type="text" name="name" th:value="${u.name}" /></td>
+						<td><input type="email" name="email" th:value="${u.email}" /></td>
+						<td><input type="text" name="username"
+							th:value="${u.username}" /></td>
+						<td>
+						<select name="role">
+							<option th:value="student" th:selected="${u.role == 'student'}">Student</option>
+        					<option th:value="admin" th:selected="${u.role == 'admin'}">Admin</option>
+						</select></td>
+						<td>
+							<button type="submit" class="btn-update">💾 Save</button> <a
+							th:href="@{/admin/users/delete/{id}(id=${u.id})}"
+							class="btn-delete">❌ Delete</a>
+						</td>
+					</form>
+				</tr>
+			</table>
+
+			<div style="margin-top: 20px; text-align: center;">
+				<a th:href="@{/admin/dashboard}"
+					style="background: #2196F3; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none;">
+					⬅ Back to Dashboard </a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

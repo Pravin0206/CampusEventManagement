@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Home Page </title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background: url('/images/campus.jpg') no-repeat center center fixed;
+	background-size: cover;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.container {
+	background: rgba(255, 255, 255, 0.95);
+	padding: 40px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+	text-align: center;
+	width: 420px;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+.btn {
+	display: block;
+	padding: 12px;
+	margin: 12px 0;
+	border: none;
+	border-radius: 6px;
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 0.3s;
+}
+
+.btn-admin {
+	background: #4CAF50;
+}
+
+.btn-admin:hover {
+	background: #45a049;
+}
+
+.btn-student {
+	background: #2196F3;
+}
+
+.btn-student:hover {
+	background: #1976d2;
+}
+
+.btn-login {
+	background: #f39c12;
+}
+
+.btn-login:hover {
+	background: #e67e22;
+}
+
+.btn-signup {
+	background: #9b59b6;
+}
+
+.btn-signup:hover {
+	background: #8e44ad;
+}
+</style>
+</head>
+<body>
+<div class="container">
+        <h1>Welcome to Campus Event Management 🎉</h1>
+        <p>Select an option:</p>
+        
+        <!-- ✅ If logged in as Admin -->
+    <div th:if="${session.loggedInUser != null and session.loggedInUser.role == 'Admin'}">
+        <a th:href="@{/admin/dashboard}" class="btn btn-admin">👩‍💼 Go to Admin Dashboard</a>
+    </div>
+
+    <!-- ✅ If logged in as Student -->
+    <div th:if="${session.loggedInUser != null and session.loggedInUser.role == 'Student'}">
+        <a th:href="@{/student/dashboard}" class="btn btn-student">🎓 Go to Student Dashboard</a>
+    </div>
+
+    <!-- ✅ If not logged in -->
+    <div th:if="${session.loggedInUser == null}">
+        <a th:href="@{/users/login}" class="btn btn-login">🔑 Login</a>
+        <a th:href="@{/users/signup}" class="btn btn-signup">📝 Signup</a>
+    </div>
+</body>
+</html>

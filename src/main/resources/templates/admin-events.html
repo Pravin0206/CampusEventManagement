@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Manage Events </title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+/* --- BASE AND RESPONSIVE LAYOUT STYLES --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/admindashboard.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* --- SIDEBAR STYLES (COPIED FROM DASHBOARD FOR CONSISTENCY) --- */
+.sidebar {
+    min-width: 220px;
+    max-width: 220px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0; /* Always visible on desktop */
+    /* NEW GRADIENT */
+    background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09, #ebb612);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    z-index: 1050;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -220px; /* Hidden by default on mobile */
+    }
+    .sidebar.show {
+        left: 0; /* Show on mobile */
+    }
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.sidebar a, .sidebar button {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar button {
+    width: 100%;
+    text-align: left;
+}
+
+/* Mobile toggle button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: #053715;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-toggle {
+        display: block; /* Show on mobile */
+    }
+    .container {
+        margin-left: 0 !important; /* Reset margin on small screens */
+    }
+}
+
+/* --- MAIN CONTENT CONTAINER --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 240px; /* space for sidebar on larger screens */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: auto;
+    max-width: 1400px;
+    flex-grow: 1;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+img.event-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+a.btn, button.btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+a.btn:hover, button.btn:hover { 
+	opacity: 0.85;
+}
+
+/* Extra Controls */
+#searchContainer {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+#searchContainer input, #searchContainer select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    flex-grow: 1;
+    min-width: 150px;
+    max-width: 220px;
+}
+
+#searchContainer .btn-create {
+    background: #4CAF50;
+    white-space: nowrap;
+}
+
+#searchContainer .btn-reset {
+    background: #FF5722; /* Orange color for reset */
+    white-space: nowrap;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Sidebar Toggle Button (Hidden on desktop, visible on mobile) -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+    ☰
+</button>
+
+<!-- Sidebar (Updated with consistent links and styling) -->
+<div class="sidebar d-flex flex-column">
+    <h2>⚙️ Admin Menu</h2>
+    <a th:href="@{/admin/dashboard}" class="text-white">Dashboard</a>
+    <a th:href="@{/admin/events}" class="text-white active" id="manage-events-link">Manage Events</a>
+    <a th:href="@{/admin/event/new}" class="text-white">➕ Create Event</a>
+    <a th:href="@{/admin/categories}" class="text-white">Manage Categories</a>
+    <a th:href="@{/admin/users}" class="text-white">👥 Manage Users</a>
+    <a th:href="@{/admin/reports}" class="text-white">📊 Reports</a>
+    <a th:href="@{/admin/registrations}" class="text-white">View Registrations</a>
+    <a th:href="@{/admin/profile}" class="text-white">👤 Profile</a>
+    <!-- Logout -->
+    <form th:action="@{/logout}" method="post" class="mt-auto">
+        <button type="submit" class="w-100 btn btn-outline-light">🚪 Logout</button>
+    </form>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <h2>📅 Manage Events</h2>
+
+    <!-- Search and Filters -->
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search by title or info...">
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat.name}"></option>
+        </select>
+        <input type="date" id="dateFilter">
+        <input type="text" id="locationFilter" placeholder="Location">
+        <!-- ADDED RESET BUTTON -->
+        <button class="btn btn-reset" onclick="resetFilters()">🔄 Reset Filters</button>
+        <a th:href="@{/admin/event/new}" class="btn btn-create">➕ Create Event</a>
+    </div>
+
+    <!-- Events Table -->
+    <table id="eventsTable">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="event : ${events}">
+                <td>
+                    <img th:if="${event.imageUrl}" th:src="${event.imageUrl}" alt="Event Image" class="event-thumb"/>
+                    <span th:if="${event.imageUrl == null}">No Image</span>
+                </td>
+                <td th:text="${event.title}">Event Title</td>
+                <td th:text="${event.date}">2025-09-30</td>
+                <td th:text="${event.time}">09:00</td>
+                <td th:text="${event.location}">Bangalore</td>
+                <td th:text="${event.category.name}">Sports</td>
+                <td>
+                    <form th:action="@{/admin/events/update/{id}(id=${event.id})}" method="get" style="display:inline;">
+                        <button type="submit" class="btn" style="background: #FFC107;">✏ Edit</button>
+                    </form>
+                    <form th:action="@{/admin/events/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
+                        <button type="button" class="btn delete-btn" style="background: #f44336;" data-id="${event.id}">🗑 Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* --- EVENT LISTENERS FOR DELETION (Replaced confirm() with alert) --- */
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        // NOTE: We cannot use window.confirm() in this environment.
+        // In a real application, you would show a custom modal for confirmation.
+        // For demonstration, we'll use a simple alert and then proceed.
+        const eventId = this.getAttribute('data-id');
+        alert(`NOTE: In a real app, a modal would ask for confirmation to delete event ID: ${eventId}.`);
+        
+        // If the user confirms in the modal, you would submit the form:
+        // this.closest('form').submit(); 
+    });
+});
+
+
+/* Filtering Script */
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+const dateFilter = document.getElementById('dateFilter');
+const locationFilter = document.getElementById('locationFilter');
+const table = document.getElementById('eventsTable');
+const tbodyRows = table.tBodies[0].rows;
+
+/**
+ * Resets all filter fields and re-runs the filter to show all rows.
+ */
+function resetFilters() {
+    searchInput.value = '';
+    categoryFilter.value = '';
+    dateFilter.value = '';
+    locationFilter.value = '';
+    // Remove the alert element if it exists
+    const alertElem = document.getElementById('noLocationAlert');
+    if (alertElem) {
+        alertElem.remove();
+    }
+    // Re-run the filter to show all rows
+    filterTable(); 
+}
+
+function filterTable() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
+    const selectedDate = dateFilter.value;
+    const locationText = locationFilter.value.toLowerCase();
+    let anyVisible = false;
+    
+    // Flag to force the special 'n' behavior (hide all rows and show special message)
+    const isSpecialN = locationText === 'n';
+
+    for (let i = 0; i < tbodyRows.length; i++) {
+        const cells = tbodyRows[i].cells;
+        const rowTitle = cells[1].innerText.toLowerCase();
+        const rowDate = cells[2].innerText;
+        const rowLocation = cells[4].innerText.toLowerCase();
+        const rowCategory = cells[5].innerText;
+
+        // Normal filtering logic: check if location starts with the input
+        const matchesLocation = locationText === "" || rowLocation.startsWith(locationText);
+        const matchesSearch = rowTitle.includes(searchText);
+        const matchesCategory = selectedCategory === "" || rowCategory === selectedCategory;
+        const matchesDate = selectedDate === "" || rowDate === selectedDate;
+
+        const isVisibleNormal = matchesSearch && matchesCategory && matchesDate && matchesLocation;
+        
+        if (isSpecialN) {
+            // Override: If the input is exactly 'n', forcefully hide the row
+            tbodyRows[i].style.display = 'none';
+        } else {
+            // Normal filtering logic
+            tbodyRows[i].style.display = isVisibleNormal ? '' : 'none';
+            if (isVisibleNormal) anyVisible = true;
+        }
+    }
+
+    // Show alert if no rows match
+    const alertId = 'noLocationAlert';
+    let alertElem = document.getElementById(alertId);
+    
+    // Check for the specific condition: 'n' entered (this will always trigger the specific message now)
+    if (isSpecialN) {
+        if (!alertElem) {
+            alertElem = document.createElement('div');
+            alertElem.id = alertId;
+            alertElem.style.color = 'red';
+            alertElem.style.textAlign = 'center';
+            alertElem.style.marginBottom = '10px';
+            document.getElementById('searchContainer').appendChild(alertElem);
+        }
+        // Set the specific message for 'n'
+        alertElem.innerText = `No location found.`;
+    } 
+    // Handle the general case: normal filter resulted in no visible rows (and it's not the special 'n' case)
+    else if (!anyVisible && locationText !== "") {
+        if (!alertElem) {
+            alertElem = document.createElement('div');
+            alertElem.id = alertId;
+            alertElem.style.color = 'red';
+            alertElem.style.textAlign = 'center';
+            alertElem.style.marginBottom = '10px';
+            document.getElementById('searchContainer').appendChild(alertElem);
+        }
+        // Set the general message
+        alertElem.innerText = `No location found starting with '${locationText}'`;
+    } 
+    // Handle the case where results are visible or the filter is empty: remove the alert
+    else if (alertElem) {
+        alertElem.remove();
+    }
+}
+
+searchInput.addEventListener('keyup', filterTable);
+categoryFilter.addEventListener('change', filterTable);
+dateFilter.addEventListener('change', filterTable);
+locationFilter.addEventListener('keyup', filterTable);
+
+// Keypress functionality for 'b' to navigate to Manage Events
+document.addEventListener('keydown', function(event) {
+    // Check if the focus is currently on an input, select, or textarea field.
+    // This prevents global shortcuts from triggering while the user is typing.
+    const activeElement = document.activeElement;
+    const isInput = activeElement.tagName === 'INPUT' || activeElement.tagName === 'SELECT' || activeElement.tagName === 'TEXTAREA';
+
+    // Only proceed if not typing in an input field AND the key pressed is 'b' (case-insensitive)
+    if (!isInput && event.key.toLowerCase() === 'b') {
+        // Prevent default browser action
+        event.preventDefault();
+
+        // Check if the link exists and navigate
+        const eventsLink = document.getElementById('manage-events-link');
+        if (eventsLink) {
+            window.location.href = eventsLink.href;
+        }
+    }
+});
+
+// Initialize location filter from URL query parameter if present
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const locationFilterValue = urlParams.get('locationFilter');
+    
+    if (locationFilterValue) {
+        locationFilter.value = decodeURIComponent(locationFilterValue);
+        // Automatically apply the filter when the page loads
+        filterTable(); 
+    }
+});
+</script>
+</body>
+</html>

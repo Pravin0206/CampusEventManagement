@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Admin - View Registrations </title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09, #ebb612);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 6px;
+    display: block;
+}
+
+.sidebar a:hover {
+    background: #4CAF50;
+}
+
+.sidebar form button {
+    background: none;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+}
+
+.sidebar form button:hover {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+/* --- Main content styling --- */
+.content {
+    flex: 1;
+    background: url('/images/admindashboard.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 1200px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* --- Table Styling --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e2f0d9;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -220px; /* Hidden by default on mobile */
+    }
+    .sidebar.show {
+        left: 0; /* Show on mobile */
+    }
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.sidebar a, .sidebar button {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar button {
+    width: 100%;
+    text-align: left;
+}
+
+/* Mobile toggle button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: #053715;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-toggle {
+        display: block; /* Show on mobile */
+    }
+    .container {
+        margin-left: 0 !important; /* Reset margin on small screens */
+    }
+}
+
+/* --- MAIN CONTENT CONTAINER --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 240px; /* space for sidebar on larger screens */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: auto;
+    max-width: 1400px;
+    flex-grow: 1;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+img.event-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+a.btn, button.btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+a.btn:hover, button.btn:hover { 
+	opacity: 0.85;
+}
+
+/* Extra Controls */
+#searchContainer {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+#searchContainer input, #searchContainer select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    flex-grow: 1;
+    min-width: 150px;
+    max-width: 220px;
+}
+
+#searchContainer .btn-create {
+    background: #4CAF50;
+    white-space: nowrap;
+}
+
+#searchContainer .btn-reset {
+    background: #FF5722; /* Orange color for reset */
+    white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>⚙️ Admin</h2>
+    <a href="/admin/dashboard">🏠 Dashboard</a>
+    <a href="/admin/events">📅 Manage Events</a>
+    <a href="/admin/users">👥 Manage Users</a>
+    <a href="/admin/reports">📊 Reports</a>
+    <a th:href="@{/admin/profile}">👤 Profile</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">🚪 Logout</button>
+    </form>
+</div>
+
+<div class="content">
+    <div class="container">
+        <h1>📋 All Registrations</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Event Title</th>
+                    <th>Event Date</th>
+                    <th>Registration Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="reg : ${registrations}">
+                    <td th:text="${reg.user.name}">John Doe</td>
+                    <td th:text="${reg.user.email}">john@example.com</td>
+                    <td th:text="${reg.event.title}">Spring Boot Workshop</td>
+                    <td th:text="${#temporals.format(reg.event.date, 'dd-MM-yyyy')}">01-10-2025</td>
+                    <td th:text="${#temporals.format(reg.registrationDate, 'dd-MM-yyyy')}">25-09-2025</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(registrations)}">
+                    <td colspan="6">No registrations found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

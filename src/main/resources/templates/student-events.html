@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Available Events</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url("@{/images/campuseventimages.jpg}") no-repeat center center fixed;
+    background-size: cover;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.sidebar {
+    width: 220px;
+    background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    backdrop-filter: blur(5px);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.main-content {
+    flex: 1;
+    background-image: linear-gradient(to right top, #717d99, #159fc8, #00c2c7, #00dd8b, #a8eb12);
+    margin: 20px;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+img.event-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+a.btn {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+}
+
+</style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Student Menu</h2>
+    <a th:href="@{/student/dashboard}">Dashboard</a>
+    <a th:href="@{/student/events}">View Events</a>
+    <a th:href="@{/student/registrations}">My Registrations</a>
+    <a th:href="@{/student/reports}">📊 Reports</a>
+    <a th:href="@{/users/profile}">👤 Profile</a>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="main-content">
+    <h1>Upcoming Events</h1>
+
+    <!-- Search Form with Categories and Reset -->
+    <form th:action="@{/student/events}" method="get" class="mb-3 d-flex">
+        <!-- Keyword Search -->
+        <input type="text" name="keyword" class="form-control" placeholder="Search by Title" th:value="${keyword}">
+
+        <!-- Categories Dropdown -->
+        <select name="categoryId" class="form-control" th:value="${categoryId}">
+            <option value="">All Categories</option>
+            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+        </select>
+
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary">Search</button>
+
+        <!-- Reset Button -->
+        <a th:href="@{/student/events}" class="btn btn-secondary">Reset</a>
+    </form>
+
+    <!-- Events Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="event : ${events}">
+                <td>
+                    <img th:if="${event.imageUrl}" th:src="${event.imageUrl}" class="event-thumb" alt="Event">
+                    <span th:if="${event.imageUrl == null}">No Image</span>
+                </td>
+                <td th:text="${event.title}">Event Title</td>
+                <td th:text="${event.date}">2025-09-30</td>
+                <td th:text="${event.time}">09:00</td>
+                <td th:text="${event.location}">Bangalore</td>
+                <td th:text="${event.category.name}">Sports</td>
+                <td>
+                    <!-- Already registered -->
+                    <span th:if="${registeredEventIds.contains(event.id)}">
+                        Registered
+                        <form th:if="${eventIdToRegistrationId[event.id] != null}"
+                              th:action="@{'/student/registrations/delete/' + ${eventIdToRegistrationId[event.id]}}"
+                              method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-outline-danger btn-sm ms-2"
+                                    onclick="return confirm('Cancel registration?');">
+                                Cancel
+                            </button>
+                        </form>
+                    </span>
+
+                    <!-- Not registered -->
+                    <span th:if="${!registeredEventIds.contains(event.id)}">
+                        <form th:action="@{/student/registrations/register/{id}(id=${event.id})}"
+                              method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-outline-success btn-sm ms-2">
+                                Register
+                            </button>
+                        </form>
+                    </span>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(events)}">
+                <td colspan="7">No events available.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

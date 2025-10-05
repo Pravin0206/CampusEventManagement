@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup Page</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('/images/signup.jpg') no-repeat center center fixed; /* ✅ background stays */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 60px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            border: 1px solid #4CAF50;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #errorMsg {
+            margin-bottom: 15px;
+            color: red;
+            font-weight: bold;
+        }
+
+        #successMsg {
+            margin-bottom: 15px;
+            color: green;
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Signup</h2>
+
+        <!-- Show error or success messages -->
+        <p id="errorMsg" th:if="${error}" th:text="${error}"></p>
+        <p id="successMsg" th:if="${message}" th:text="${message}"></p>
+
+        <!-- Signup form -->
+        <form th:action="@{/signup}" method="post">
+            <input type="text" name="name" placeholder="Name" maxlength="80" required><br>
+            <input type="email" name="email" placeholder="Email" maxlength="80" required><br>
+            <input type="text" name="username" placeholder="Username" maxlength="80" required><br>
+            <input type="password" name="password" placeholder="Password" maxlength="80" required><br>
+            
+            <select name="role" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="Student"> Student </option> <!-- ✅ Fixed typo -->
+                <option value="Admin"> Admin </option>
+            </select><br>
+            
+            <button type="submit"> Signup </button>
+        </form>
+
+        <br>
+        <a th:href="@{/home}">🏠 Back to Home</a> <br>
+        <a th:href="@{/login}">Already have an account? Login</a>
+    </div>
+</body>
+</html>

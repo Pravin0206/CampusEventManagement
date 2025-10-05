@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Category Form </title>
+<style>
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background: url('/images/eventformbg.jpg') no-repeat center center fixed;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.form-container {
+	background: rgba(255, 255, 255, 0.95);
+	padding: 30px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+	width: 400px;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 20px;
+	color: #673AB7;
+}
+
+label {
+	font-weight: bold;
+	display: block;
+	margin-top: 10px;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+}
+
+button {
+	margin-top: 20px;
+	width: 100%;
+	padding: 12px;
+	background: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+button:hover {
+	background: #45a049;
+}
+
+.back-link {
+	display: block;
+	margin-top: 15px;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="form-container">
+    <h2 th:text="${category.id == null} ? 'Add Category' : 'Edit Category'"></h2>
+
+    <form th:action="@{/admin/categories/save}" th:object="${category}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" placeholder="Enter category name" required />
+
+        <button type="submit">💾 Save Category</button>
+    </form>
+
+    <a th:href="@{/admin/categories}" class="back-link">⬅ Back to Categories</a>
+</div>
+</body>
+</html>

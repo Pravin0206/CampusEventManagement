@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Registrations</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+button {
+    padding: 5px 10px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+</style>
+</head>
+<body>
+<h1>All Registrations</h1>
+<a th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Event</th>
+            <th>Registered At</th>
+            <th>Status</th>
+            <th>Approved By</th>
+            <th>Approval Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="reg : ${registrations}">
+            <td th:text="${reg.user.name}"></td>
+            <td th:text="${reg.event.title}"></td>
+            <td th:text="${#dates.format(reg.registeredAt,'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${reg.status}"></td>
+            <td th:text="${reg.approvedBy != null ? reg.approvedBy.name : 'N/A'}"></td>
+            <td th:text="${reg.approvalDate != null ? #dates.format(reg.approvalDate,'dd-MM-yyyy HH:mm') : 'N/A'}"></td>
+            <td>
+                <!-- Only show buttons if status is PENDING -->
+                <th:block
+						th:if="${reg.status == T(com.event.entity.Registration.Status).PENDING}">
+
+						<form
+							th:action="@{/admin/attendance/approve/{registrationId}(registrationId=${reg.id})}"
+							method="post" style="display: inline;">
+							<button type="submit" class="btn" style="background: green;">Approve</button>
+						</form>
+
+						<form
+							th:action="@{/admin/attendance/reject/{registrationId}(registrationId=${reg.id})}"
+							method="post" style="display: inline;">
+							<button type="submit" class="btn" style="background: red;">Reject</button>
+						</form>
+
+					</th:block> <!-- Show status text if not PENDING -->
+                <th:block th:if="${reg.status != T(com.event.entity.Registration.Status).PENDING}">
+                    <span th:text="${reg.status}"></span>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(registrations)}">
+            <td colspan="7">No registrations found.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Optional: Mark all past events -->
+<form th:action="@{/attendance/admin/mark/past-events}" method="post" style="margin-top: 20px;">
+    <button type="submit">Mark All Past Events as Attended</button>
+</form>
+
+</body>
+</html>

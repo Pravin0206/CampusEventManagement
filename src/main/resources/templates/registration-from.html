@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Event Registration </title>
+<style>
+body {
+    margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+	background: url("@{/images/eventform.jpg}") no-repeat center center fixed;
+	background-size: cover;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 400px;
+}
+
+.sidebar {
+	width: 220px;
+	background: linear-gradient(to right top, #053715, #2f5918, #627b14, #a19b09, #ebb612);
+    backdrop-filter: blur(10px);
+	color: white;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+}
+
+.sidebar h2 {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.sidebar a {
+	color: white;
+	text-decoration: none;
+	padding: 10px 0;
+	margin: 5px 0;
+	border-radius: 5px;
+	transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+	background-color: rgba(255,255,255,0.2);
+}
+
+.main-content {
+	flex: 1;
+	background: linear-gradient(to right top, #bae219, #b0c43d, #a1a851, #8e8e60, #76756d);
+	margin: 20px;
+	border-radius: 15px;
+	padding: 40px;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+	max-width: 600px;
+}
+
+h1 {
+	font-size: 2em;
+	margin-bottom: 20px;
+	color: #333;
+	text-align: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin: 10px 0 5px;
+	font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+	padding: 10px;
+	font-size: 16px;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	margin-bottom: 15px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+button.btn {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+button.btn:hover {
+	opacity: 0.85;
+}
+
+.event-info {
+	margin-bottom: 20px;
+	padding: 15px;
+	background: #f1f1f1;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.event-info h2, .event-info p {
+	margin: 5px 0;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -220px; /* Hidden by default on mobile */
+    }
+    .sidebar.show {
+        left: 0; /* Show on mobile */
+    }
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.sidebar a, .sidebar button {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+}
+
+.sidebar a:hover, .sidebar button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar button {
+    width: 100%;
+    text-align: left;
+}
+
+/* Mobile toggle button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: #053715;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-toggle {
+        display: block; /* Show on mobile */
+    }
+    .container {
+        margin-left: 0 !important; /* Reset margin on small screens */
+    }
+}
+
+/* --- MAIN CONTENT CONTAINER --- */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 240px; /* space for sidebar on larger screens */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: auto;
+    max-width: 1400px;
+    flex-grow: 1;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+th {
+    background-color: #673AB7;
+    color: white;
+}
+
+img.event-thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+a.btn, button.btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+a.btn:hover, button.btn:hover { 
+	opacity: 0.85;
+}
+
+/* Extra Controls */
+#searchContainer {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+#searchContainer input, #searchContainer select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    flex-grow: 1;
+    min-width: 150px;
+    max-width: 220px;
+}
+
+#searchContainer .btn-create {
+    background: #4CAF50;
+    white-space: nowrap;
+}
+
+#searchContainer .btn-reset {
+    background: #FF5722; /* Orange color for reset */
+    white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Student Menu</h2>
+    <a th:href="@{/student/dashboard}">Dashboard</a>
+    <a th:href="@{/student/events}">View Events</a>
+    <a th:href="@{/student/registrations}">My Registrations</a>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="main-content">
+    <h1>Event Registration</h1>
+
+    <div class="event-info">
+        <h2 th:text="${event.title}">Event Title</h2>
+        <p><strong>Date:</strong> <span th:text="${event.date}">2025-09-30</span></p>
+        <p><strong>Time:</strong> <span th:text="${event.time}">09:00</span></p>
+        <p><strong>Location:</strong> <span th:text="${event.location}">Bangalore</span></p>
+        <p><strong>Category:</strong> <span th:text="${event.category.name}">Sports</span></p>
+    </div>
+
+    <form th:action="@{/student/events/register}" method="post">
+        <input type="hidden" name="eventId" th:value="${event.id}" />
+
+        <label for="studentName">Your Name</label>
+        <input type="text" id="studentName" name="studentName" placeholder="Enter your name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="notes">Notes / Comments</label>
+        <textarea id="notes" name="notes" placeholder="Any additional info..." rows="4"></textarea>
+
+        <button type="submit" class="btn">Submit Registration</button>
+    </form>
+</div>
+</body>
+</html>
